@@ -118,6 +118,14 @@ input[type="text"]:focus {
     margin-bottom: 30px;
 }
 
+.hint {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85em;
+    color: #999;
+    font-style: italic;
+}
+
 .btn {
     padding: 15px 40px;
     border: none;

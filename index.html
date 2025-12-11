@@ -29,18 +29,21 @@
 
     <div class="text-section">
         <div class="text-group">
-            <label for="textLeft">✏️ Text bên trái:</label>
-            <input type="text" id="textLeft" placeholder="Nhập text hiển thị bên trái... ">
+            <label for="textLeft">✏️ Text bên trái (góc dưới trái):</label>
+            <input type="text" id="textLeft" placeholder="Mặc định: Trước">
+            <small class="hint">💡 Để trống sẽ hiển thị "Trước"</small>
         </div>
 
         <div class="text-group">
-            <label for="textMiddle">✏️ Text ở giữa:</label>
-            <input type="text" id="textMiddle" placeholder="Nhập text hiển thị giữa 2 ảnh...">
+            <label for="textMiddle">✏️ Text ở giữa (trên cùng):</label>
+            <input type="text" id="textMiddle" placeholder="Nhập text tùy chỉnh... ">
+            <small class="hint">💡 Để trống sẽ không hiển thị</small>
         </div>
 
         <div class="text-group">
-            <label for="textRight">✏️ Text bên phải:</label>
-            <input type="text" id="textRight" placeholder="Nhập text hiển thị bên phải...">
+            <label for="textRight">✏️ Text bên phải (góc dưới phải):</label>
+            <input type="text" id="textRight" placeholder="Mặc định: Sau">
+            <small class="hint">💡 Để trống sẽ hiển thị "Sau"</small>
         </div>
     </div>
 
@@ -52,7 +55,7 @@
 
     <div id="resultSection" class="result-section" style="display: none;">
         <h2>Kết quả</h2>
-        <p class="mobile-hint">💡 Chạm vào chữ để kéo thả vị trí</p>
+        <p class="mobile-hint">📱 Xoay ngang để xem rõ hơn</p>
         <div class="canvas-container">
             <canvas id="canvas"></canvas>
         </div>
@@ -64,11 +67,11 @@
     </div>
 
     <!-- Overlay yêu cầu xoay ngang -->
-    <div id="rotateOverlay" class="rotate-overlay" style="display: none;">
+    <div id="rotateOverlay" class="rotate-overlay" style="display:none;">
         <div class="rotate-content">
             <div class="rotate-icon">📱➡️📱</div>
             <h2>Xoay ngang điện thoại</h2>
-            <p>Để chỉnh sửa ảnh dễ dàng hơn, vui lòng xoay điện thoại sang chế độ ngang</p>
+            <p>Để xem ảnh rõ hơn, vui lòng xoay điện thoại sang chế độ ngang</p>
             <div class="rotate-animation">
                 <svg width="100" height="100" viewBox="0 0 100 100">
                     <rect x="20" y="30" width="60" height="40" rx="5" fill="white" stroke="#667eea" stroke-width="3"/>
@@ -89,8 +92,8 @@
 <!-- Fullscreen Editor cho Landscape Mobile -->
 <div id="fullscreenEditor" class="fullscreen-editor" style="display:none;">
     <div class="editor-header">
-        <div class="editor-title">✏️ Chỉnh sửa ảnh</div>
-        <div class="editor-hint">💡 Chạm vào chữ để kéo thả</div>
+        <div class="editor-title">🖼️ Xem ảnh đã ghép</div>
+        <div class="editor-hint">💡 Xem và tải xuống ảnh của bạn</div>
     </div>
 
     <div class="editor-canvas-container">

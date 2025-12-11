@@ -24,12 +24,12 @@ const closeEditorBtn = document.getElementById('closeEditorBtn');
 
 let img1 = null;
 let img2 = null;
-let texts = [];
-let selectedText = null;
-let isDragging = false;
-let dragOffset = {x: 0, y: 0};
 let resultShown = false;
 let isEditorMode = false;
+
+// Canvas xuất ảnh (full HD - độ phân giải gốc)
+let exportCanvas = document.createElement('canvas');
+let exportCtx = exportCanvas.getContext('2d');
 
 // Kiểm tra orientation và hiển thị overlay/editor nếu cần
 function checkOrientation() {
@@ -39,12 +39,10 @@ function checkOrientation() {
 
     if (isMobile && resultShown) {
         if (isPortrait) {
-            // Chế độ dọc:  hiện overlay yêu cầu xoay
             rotateOverlay.style.display = 'flex';
             fullscreenEditor.style.display = 'none';
             isEditorMode = false;
         } else {
-            // Chế độ ngang: hiện fullscreen editor
             rotateOverlay.style.display = 'none';
             openFullscreenEditor();
         }
@@ -62,7 +60,6 @@ function openFullscreenEditor() {
     fullscreenEditor.style.display = 'flex';
     isEditorMode = true;
 
-    // Copy canvas sang editor canvas
     editorCanvas.width = canvas.width;
     editorCanvas.height = canvas.height;
 
@@ -75,7 +72,6 @@ function closeFullscreenEditor() {
     isEditorMode = false;
     resultShown = false;
 
-    // Copy lại changes từ editor về canvas chính
     drawCanvas(ctx, canvas);
 }
 
@@ -135,51 +131,15 @@ mergeBtn.addEventListener('click', function () {
 });
 
 function mergeImages() {
-    const textLeft = textLeftInput.value || '';
-    const textMiddle = textMiddleInput.value || '';
-    const textRight = textRightInput.value || '';
-
-    const maxHeight = 600;
-
-    const scale1 = maxHeight / img1.height;
-    const scale2 = maxHeight / img2.height;
+    // Canvas hiển thị - scale xuống để hiển thị mượt
+    const displayMaxHeight = 600;
+    const scale1 = displayMaxHeight / img1.height;
+    const scale2 = displayMaxHeight / img2.height;
     const img1Width = img1.width * scale1;
     const img2Width = img2.width * scale2;
 
     canvas.width = img1Width + img2Width;
-    canvas.height = maxHeight;
-
-    texts = [];
-
-    if (textLeft) {
-        texts.push({
-            text: textLeft,
-            x: 50,
-            y: 50,
-            fontSize: 30,
-            color: '#0000ff'
-        });
-    }
-
-    if (textMiddle) {
-        texts.push({
-            text: textMiddle,
-            x: canvas.width / 2 - 50,
-            y: canvas.height / 2,
-            fontSize: 30,
-            color: '#0000ff'
-        });
-    }
-
-    if (textRight) {
-        texts.push({
-            text: textRight,
-            x: canvas.width - 150,
-            y: 50,
-            fontSize: 30,
-            color: '#0000ff'
-        });
-    }
+    canvas.height = displayMaxHeight;
 
     drawCanvas(ctx, canvas);
     resultSection.style.display = 'block';
@@ -188,157 +148,162 @@ function mergeImages() {
 }
 
 function drawCanvas(context, targetCanvas) {
-    const scale1 = targetCanvas.height / img1.height;
-    const scale2 = targetCanvas.height / img2.height;
+    const canvasHeight = targetCanvas.height;
+    const scale1 = canvasHeight / img1.height;
+    const scale2 = canvasHeight / img2.height;
     const img1Width = img1.width * scale1;
     const img2Width = img2.width * scale2;
 
-    context.drawImage(img1, 0, 0, img1Width, targetCanvas.height);
-    context.drawImage(img2, img1Width, 0, img2Width, targetCanvas.height);
+    // Enable high-quality image rendering
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = 'high';
 
-    texts.forEach((textObj, index) => {
-        context.font = `bold ${textObj.fontSize}px Arial`;
-        context.textBaseline = 'top';
+    // Vẽ 2 ảnh
+    context.drawImage(img1, 0, 0, img1Width, canvasHeight);
+    context.drawImage(img2, img1Width, 0, img2Width, canvasHeight);
 
-        const metrics = context.measureText(textObj.text);
-        const textWidth = metrics.width;
-        const textHeight = textObj.fontSize;
+    // Lấy text từ inputs
+    const textLeft = textLeftInput.value.trim() || 'Trước';
+    const textMiddle = textMiddleInput.value.trim();
+    const textRight = textRightInput.value.trim() || 'Sau';
 
-        textObj.width = textWidth;
-        textObj.height = textHeight;
+    const fontSize = 40;
+    context.font = `bold ${fontSize}px Arial`;
+    context.textBaseline = 'top';
+
+    const padding = 20;
+
+    // Text bên trái (góc dưới trái) - "Trước"
+    const leftX = padding;
+    const leftY = canvasHeight - fontSize - padding;
+
+    context.strokeStyle = '#ffffff';
+    context.lineWidth = 6;
+    context.strokeText(textLeft, leftX, leftY);
+
+    context.fillStyle = '#0000ff';
+    context.fillText(textLeft, leftX, leftY);
+
+    // Text ở giữa (trên cùng ở giữa) - custom text
+    if (textMiddle) {
+        const metrics = context.measureText(textMiddle);
+        const middleX = (targetCanvas.width - metrics.width) / 2;
+        const middleY = padding;
 
         context.strokeStyle = '#ffffff';
-        context.lineWidth = 4;
-        context.strokeText(textObj.text, textObj.x, textObj.y);
+        context.lineWidth = 6;
+        context.strokeText(textMiddle, middleX, middleY);
 
-        context.fillStyle = textObj.color;
-        context.fillText(textObj.text, textObj.x, textObj.y);
-
-        if (selectedText === index) {
-            context.strokeStyle = 'rgba(0, 255, 0, 0.8)';
-            context.lineWidth = 2;
-            context.setLineDash([5, 5]);
-            context.strokeRect(textObj.x - 5, textObj.y - 5, textWidth + 10, textHeight + 10);
-            context.setLineDash([]);
-        }
-    });
-}
-
-// Hàm lấy tọa độ chuột/touch
-function getPointerPosition(e, targetCanvas) {
-    const rect = targetCanvas.getBoundingClientRect();
-    const scaleX = targetCanvas.width / rect.width;
-    const scaleY = targetCanvas.height / rect.height;
-
-    let clientX, clientY;
-
-    if (e.touches && e.touches. length > 0) {
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-    } else {
-        clientX = e.clientX;
-        clientY = e. clientY;
+        context.fillStyle = '#ff0000';
+        context.fillText(textMiddle, middleX, middleY);
     }
 
-    return {
-        x:  (clientX - rect.left) * scaleX,
-        y:  (clientY - rect.top) * scaleY
-    };
+    // Text bên phải (góc dưới phải) - "Sau"
+    const metricsRight = context.measureText(textRight);
+    const rightX = targetCanvas.width - metricsRight.width - padding;
+    const rightY = canvasHeight - fontSize - padding;
+
+    context.strokeStyle = '#ffffff';
+    context.lineWidth = 6;
+    context.strokeText(textRight, rightX, rightY);
+
+    context.fillStyle = '#0000ff';
+    context.fillText(textRight, rightX, rightY);
 }
 
-// Hàm xử lý bắt đầu kéo
-function handleDragStart(e, targetCanvas) {
-    e.preventDefault();
+// Hàm vẽ canvas chất lượng cao cho export
+function drawHighQualityCanvas() {
+    // Sử dụng độ phân giải gốc của ảnh
+    const maxHeight = Math.max(img1.height, img2.height);
+    const scale1 = maxHeight / img1.height;
+    const scale2 = maxHeight / img2.height;
+    const img1Width = img1.width * scale1;
+    const img2Width = img2.width * scale2;
 
-    const pos = getPointerPosition(e, targetCanvas);
-    const mouseX = pos.x;
-    const mouseY = pos.y;
+    exportCanvas.width = img1Width + img2Width;
+    exportCanvas.height = maxHeight;
 
-    selectedText = null;
-    for (let i = texts.length - 1; i >= 0; i--) {
-        const t = texts[i];
-        if (mouseX >= t.x - 5 && mouseX <= t.x + t.width + 5 &&
-            mouseY >= t.y - 5 && mouseY <= t.y + t.height + 5) {
-            selectedText = i;
-            isDragging = true;
-            dragOffset. x = mouseX - t.x;
-            dragOffset.y = mouseY - t.y;
-            break;
-        }
+    // Enable high-quality rendering
+    exportCtx.imageSmoothingEnabled = true;
+    exportCtx.imageSmoothingQuality = 'high';
+
+    // Vẽ ảnh với độ phân giải gốc
+    exportCtx.drawImage(img1, 0, 0, img1Width, maxHeight);
+    exportCtx.drawImage(img2, img1Width, 0, img2Width, maxHeight);
+
+    // Tính scale factor
+    const scaleRatio = maxHeight / canvas.height;
+
+    // Lấy text từ inputs
+    const textLeft = textLeftInput.value.trim() || 'Trước';
+    const textMiddle = textMiddleInput.value.trim();
+    const textRight = textRightInput.value.trim() || 'Sau';
+
+    const fontSize = 40 * scaleRatio;
+    exportCtx.font = `bold ${fontSize}px Arial`;
+    exportCtx.textBaseline = 'top';
+
+    const padding = 20 * scaleRatio;
+
+    // Text bên trái (góc dưới trái) - "Trước"
+    const leftX = padding;
+    const leftY = maxHeight - fontSize - padding;
+
+    exportCtx.strokeStyle = '#ffffff';
+    exportCtx.lineWidth = 6 * scaleRatio;
+    exportCtx.strokeText(textLeft, leftX, leftY);
+
+    exportCtx.fillStyle = '#0000ff';
+    exportCtx.fillText(textLeft, leftX, leftY);
+
+    // Text ở giữa (trên cùng ở giữa) - custom text
+    if (textMiddle) {
+        const metrics = exportCtx.measureText(textMiddle);
+        const middleX = (exportCanvas.width - metrics.width) / 2;
+        const middleY = padding;
+
+        exportCtx.strokeStyle = '#ffffff';
+        exportCtx.lineWidth = 6 * scaleRatio;
+        exportCtx.strokeText(textMiddle, middleX, middleY);
+
+        exportCtx.fillStyle = '#ff0000';
+        exportCtx.fillText(textMiddle, middleX, middleY);
     }
 
-    const context = isEditorMode ? editorCtx : ctx;
-    const canvasTarget = isEditorMode ? editorCanvas : canvas;
-    drawCanvas(context, canvasTarget);
+    // Text bên phải (góc dưới phải) - "Sau"
+    const metricsRight = exportCtx.measureText(textRight);
+    const rightX = exportCanvas.width - metricsRight.width - padding;
+    const rightY = maxHeight - fontSize - padding;
+
+    exportCtx.strokeStyle = '#ffffff';
+    exportCtx.lineWidth = 6 * scaleRatio;
+    exportCtx.strokeText(textRight, rightX, rightY);
+
+    exportCtx.fillStyle = '#0000ff';
+    exportCtx.fillText(textRight, rightX, rightY);
 }
 
-// Hàm xử lý di chuyển
-function handleDragMove(e, targetCanvas) {
-    if (isDragging && selectedText !== null) {
-        e.preventDefault();
-
-        const pos = getPointerPosition(e, targetCanvas);
-        const mouseX = pos.x;
-        const mouseY = pos.y;
-
-        texts[selectedText].x = mouseX - dragOffset.x;
-        texts[selectedText].y = mouseY - dragOffset.y;
-
-        const context = isEditorMode ? editorCtx : ctx;
-        const canvasTarget = isEditorMode ? editorCanvas : canvas;
-        drawCanvas(context, canvasTarget);
-    }
-}
-
-// Hàm xử lý kết thúc kéo
-function handleDragEnd(e) {
-    isDragging = false;
-}
-
-// Sự kiện cho canvas chính (Desktop và Mobile Portrait)
-canvas.addEventListener('mousedown', (e) => handleDragStart(e, canvas));
-canvas.addEventListener('mousemove', (e) => handleDragMove(e, canvas));
-canvas.addEventListener('mouseup', handleDragEnd);
-canvas.addEventListener('mouseleave', handleDragEnd);
-canvas.addEventListener('touchstart', (e) => handleDragStart(e, canvas), {passive: false});
-canvas.addEventListener('touchmove', (e) => handleDragMove(e, canvas), {passive: false});
-canvas.addEventListener('touchend', handleDragEnd);
-canvas.addEventListener('touchcancel', handleDragEnd);
-
-// Sự kiện cho editor canvas (Mobile Landscape)
-editorCanvas.addEventListener('mousedown', (e) => handleDragStart(e, editorCanvas));
-editorCanvas.addEventListener('mousemove', (e) => handleDragMove(e, editorCanvas));
-editorCanvas.addEventListener('mouseup', handleDragEnd);
-editorCanvas.addEventListener('mouseleave', handleDragEnd);
-editorCanvas.addEventListener('touchstart', (e) => handleDragStart(e, editorCanvas), {passive: false});
-editorCanvas.addEventListener('touchmove', (e) => handleDragMove(e, editorCanvas), {passive: false});
-editorCanvas.addEventListener('touchend', handleDragEnd);
-editorCanvas.addEventListener('touchcancel', handleDragEnd);
-
-// Tải xuống ảnh từ canvas chính
+// Tải xuống ảnh chất lượng cao từ canvas chính
 downloadBtn.addEventListener('click', function () {
-    const tempSelected = selectedText;
-    selectedText = null;
-    drawCanvas(ctx, canvas);
+    // Vẽ canvas chất lượng cao
+    drawHighQualityCanvas();
 
     const link = document.createElement('a');
-    link.download = 'merged-image.png';
-    link. href = canvas.toDataURL('image/png');
+    const timestamp = new Date().getTime();
+    link.download = `merged-image-${timestamp}.png`;
+    link.href = exportCanvas.toDataURL('image/png', 1.0);
     link.click();
-
-    selectedText = tempSelected;
-    drawCanvas(ctx, canvas);
 });
 
-// Tải xuống ảnh từ editor
+// Tải xuống ảnh chất lượng cao từ editor
 downloadEditorBtn.addEventListener('click', function () {
-    const tempSelected = selectedText;
-    selectedText = null;
-    drawCanvas(editorCtx, editorCanvas);
+    // Vẽ canvas chất lượng cao
+    drawHighQualityCanvas();
 
     const link = document.createElement('a');
-    link.download = 'merged-image.png';
-    link.href = editorCanvas.toDataURL('image/png');
+    const timestamp = new Date().getTime();
+    link.download = `merged-image-${timestamp}.png`;
+    link.href = exportCanvas.toDataURL('image/png', 1.0);
     link.click();
 
     // Hiển thị thông báo
@@ -347,9 +312,6 @@ downloadEditorBtn.addEventListener('click', function () {
     setTimeout(() => {
         downloadEditorBtn.innerHTML = originalText;
     }, 2000);
-
-    selectedText = tempSelected;
-    drawCanvas(editorCtx, editorCanvas);
 });
 
 // Đóng editor
@@ -357,7 +319,7 @@ closeEditorBtn.addEventListener('click', closeFullscreenEditor);
 
 // Làm mới form
 clearBtn.addEventListener('click', function () {
-    if (confirm('🔄 Bạn có chắc muốn làm mới và bắt đầu lại? ')) {
+    if (confirm('🔄 Bạn có chắc muốn làm mới và bắt đầu lại?')) {
         image1Input.value = '';
         image2Input.value = '';
         textLeftInput.value = '';
@@ -367,8 +329,6 @@ clearBtn.addEventListener('click', function () {
         preview2.innerHTML = '';
         img1 = null;
         img2 = null;
-        texts = [];
-        selectedText = null;
         resultShown = false;
         isEditorMode = false;
         resultSection.style.display = 'none';
@@ -377,5 +337,6 @@ clearBtn.addEventListener('click', function () {
         fullscreenEditor.style.display = 'none';
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
+        exportCtx.clearRect(0, 0, exportCanvas.width, exportCanvas.height);
     }
 });
