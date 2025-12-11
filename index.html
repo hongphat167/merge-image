@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghép Ảnh & Thêm Chữ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🖼️ Ghép Ảnh & Thêm Chữ</h1>
+        <p>Ghép 2 ảnh lại với nhau và thêm text vào 3 vị trí</p>
+    </header>
+
+    <div class="upload-section">
+        <div class="upload-group">
+            <label for="image1">📷 Chọn ảnh 1:</label>
+            <input type="file" id="image1" accept="image/*">
+            <div id="preview1" class="preview"></div>
+        </div>
+
+        <div class="upload-group">
+            <label for="image2">📷 Chọn ảnh 2:</label>
+            <input type="file" id="image2" accept="image/*">
+            <div id="preview2" class="preview"></div>
+        </div>
+    </div>
+
+    <div class="text-section">
+        <div class="text-group">
+            <label for="textLeft">✏️ Text bên trái:</label>
+            <input type="text" id="textLeft" placeholder="Nhập text hiển thị bên trái... ">
+        </div>
+
+        <div class="text-group">
+            <label for="textMiddle">✏️ Text ở giữa:</label>
+            <input type="text" id="textMiddle" placeholder="Nhập text hiển thị giữa 2 ảnh...">
+        </div>
+
+        <div class="text-group">
+            <label for="textRight">✏️ Text bên phải:</label>
+            <input type="text" id="textRight" placeholder="Nhập text hiển thị bên phải...">
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button id="mergeBtn" class="btn btn-primary">🎨 Ghép Ảnh</button>
+        <button id="downloadBtn" class="btn btn-success" style="display: none;">💾 Tải Xuống</button>
+        <button id="clearBtn" class="btn btn-secondary">🔄 Làm Mới</button>
+    </div>
+
+    <div id="resultSection" class="result-section" style="display:none;">
+        <h2>Kết quả:</h2>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div id="loading" class="loading" style="display:none;">
+        <div class="spinner"></div>
+        <p>Đang xử lý...</p>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
