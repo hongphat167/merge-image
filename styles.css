@@ -1,12 +1,12 @@
 * {
     margin: 0;
-    padding:  0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family:  'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background:   linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     padding: 20px;
 }
@@ -14,10 +14,10 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background:  white;
-    border-radius:  20px;
+    background: white;
+    border-radius: 20px;
     padding: 40px;
-    box-shadow:   0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 header {
@@ -33,7 +33,7 @@ header h1 {
 
 header p {
     color: #666;
-    font-size:   1.1em;
+    font-size: 1.1em;
 }
 
 .upload-section {
@@ -52,7 +52,7 @@ label {
     font-weight: 600;
     color: #333;
     margin-bottom: 8px;
-    font-size:   1.1em;
+    font-size: 1.1em;
 }
 
 input[type="file"] {
@@ -80,9 +80,9 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    outline:   none;
-    border-color:   #667eea;
-    box-shadow:  0 0 0 3px rgba(102, 126, 234, 0.1);
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .preview {
@@ -100,13 +100,13 @@ input[type="text"]:focus {
 .preview img {
     max-width: 100%;
     max-height: 200px;
-    object-fit:  contain;
+    object-fit: contain;
 }
 
 .text-section {
     background: #f8f9ff;
-    padding:   30px;
-    border-radius:  15px;
+    padding: 30px;
+    border-radius: 15px;
     margin-bottom: 30px;
 }
 
@@ -122,20 +122,24 @@ input[type="text"]:focus {
     padding: 15px 40px;
     border: none;
     border-radius: 50px;
-    font-size:  1.1em;
+    font-size: 1.1em;
     font-weight: 600;
     cursor: pointer;
-    transition:   all 0.3s;
+    transition: all 0.3s;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn:hover {
-    transform:   translateY(-2px);
+    transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
+.btn:active {
+    transform: translateY(0);
+}
+
 .btn-primary {
-    background:  linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
 }
 
@@ -144,33 +148,35 @@ input[type="text"]:focus {
     color: white;
 }
 
-.  btn-secondary {
-    background:   linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+.btn-secondary {
+    background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
     color: #333;
 }
 
-. result-section {
+.result-section {
     text-align: center;
     margin-top: 30px;
 }
 
 .result-section h2 {
     color: #667eea;
-    margin-bottom:   20px;
+    margin-bottom: 20px;
     font-size: 1.8em;
 }
 
-/* Container cho canvas */
 .canvas-container {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     background: #f5f5f5;
-    border:  2px solid #e0e0e0;
+    border: 2px solid #e0e0e0;
     border-radius: 10px;
     padding: 15px;
-    box-shadow:  0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 #canvas {
@@ -182,7 +188,7 @@ input[type="text"]:focus {
     cursor: pointer;
 }
 
-. loading {
+.loading {
     position: fixed;
     top: 0;
     left: 0;
@@ -200,14 +206,18 @@ input[type="text"]:focus {
     width: 50px;
     height: 50px;
     border: 5px solid #f3f3f3;
-    border-top:  5px solid #667eea;
+    border-top: 5px solid #667eea;
     border-radius: 50%;
-    animation:  spin 1s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .loading p {
@@ -216,17 +226,202 @@ input[type="text"]:focus {
     margin-top: 20px;
 }
 
-/* Hint text cho mobile */
-. mobile-hint {
+.mobile-hint {
     display: none;
     font-size: 0.9em;
     color: #999;
     margin-top: 10px;
+    margin-bottom: 15px;
     font-style: italic;
 }
 
-/* Mobile styles */
-@media (max-width: 768px) {
+/* Rotate Overlay */
+.rotate-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.rotate-content {
+    text-align: center;
+    color: white;
+    padding: 40px;
+    max-width: 90%;
+}
+
+.rotate-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+    animation: rotate 2s ease-in-out infinite;
+}
+
+@keyframes rotate {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(90deg);
+    }
+}
+
+.rotate-content h2 {
+    font-size: 2em;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.rotate-content p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.rotate-animation {
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Fullscreen Editor */
+.fullscreen-editor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.editor-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.editor-title {
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.editor-hint {
+    font-size: 0.85em;
+    opacity: 0.9;
+}
+
+.editor-canvas-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    padding: 10px;
+    background: #2a2a2a;
+}
+
+#editorCanvas {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    border-radius: 5px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    touch-action: none;
+    cursor: pointer;
+}
+
+.editor-controls {
+    background: #1a1a1a;
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    border-top: 1px solid #333;
+}
+
+.editor-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.editor-btn:active {
+    transform: scale(0.95);
+}
+
+.download-btn {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    flex: 1;
+    max-width: 200px;
+}
+
+.close-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    max-width: 120px;
+}
+
+.btn-icon {
+    font-size: 1.2em;
+}
+
+.btn-text {
+    font-size: 0.95em;
+}
+
+/* Mobile Portrait styles */
+@media (max-width: 768px) and (orientation: portrait) {
     body {
         padding: 10px;
     }
@@ -241,7 +436,7 @@ input[type="text"]:focus {
     }
 
     header p {
-        font-size:  0.9em;
+        font-size: 0.9em;
     }
 
     .upload-section {
@@ -271,25 +466,40 @@ input[type="text"]:focus {
         font-size: 1.4em;
     }
 
-    /* Canvas container trên mobile */
-    .canvas-container {
-        padding: 10px;
-        margin:  0 -10px;
-        border-radius: 10px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    /* Canvas có thể cuộn ngang nhưng vẫn nằm gọn trong container */
-    #canvas {
-        max-width: none;
-        width: auto;
-        min-width: 100%;
-    }
-
     .mobile-hint {
         display: block;
+    }
+
+    .canvas-container {
+        padding: 10px;
+    }
+}
+
+/* Mobile Landscape styles - Canvas sẽ được ẩn, hiện fullscreen editor */
+@media (max-width: 1024px) and (orientation: landscape) {
+    .editor-header {
+        padding: 8px 15px;
+    }
+
+    .editor-title {
+        font-size: 1em;
+    }
+
+    .editor-hint {
+        font-size: 0.8em;
+    }
+
+    .editor-canvas-container {
+        padding: 5px;
+    }
+
+    .editor-controls {
+        padding: 10px;
+    }
+
+    .editor-btn {
+        padding: 10px 20px;
+        font-size: 0.9em;
     }
 }
 
