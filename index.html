@@ -10,18 +10,18 @@
 <div class="container">
     <header>
         <h1>🖼️ Ghép Ảnh & Thêm Chữ</h1>
-        <p>Ghép 2 ảnh lại với nhau và thêm text vào 3 vị trí</p>
+        <p>Chọn 2 ảnh, thêm chữ và tải xuống ngay!</p>
     </header>
 
     <div class="upload-section">
         <div class="upload-group">
-            <label for="image1">📷 Chọn ảnh 1:</label>
+            <label for="image1">📷 Ảnh 1 (Bên trái):</label>
             <input type="file" id="image1" accept="image/*">
             <div id="preview1" class="preview"></div>
         </div>
 
         <div class="upload-group">
-            <label for="image2">📷 Chọn ảnh 2:</label>
+            <label for="image2">📷 Ảnh 2 (Bên phải):</label>
             <input type="file" id="image2" accept="image/*">
             <div id="preview2" class="preview"></div>
         </div>
@@ -29,86 +29,38 @@
 
     <div class="text-section">
         <div class="text-group">
-            <label for="textLeft">✏️ Text bên trái (góc dưới trái):</label>
+            <label for="textLeft">✏️ Chữ bên trái:</label>
             <input type="text" id="textLeft" placeholder="Mặc định: Trước">
             <small class="hint">💡 Để trống sẽ hiển thị "Trước"</small>
         </div>
 
         <div class="text-group">
-            <label for="textMiddle">✏️ Text ở giữa (trên cùng):</label>
-            <input type="text" id="textMiddle" placeholder="Nhập text tùy chỉnh... ">
+            <label for="textMiddle">✏️ Chữ ở giữa:</label>
+            <input type="text" id="textMiddle" placeholder="Nhập chữ tùy chỉnh...">
             <small class="hint">💡 Để trống sẽ không hiển thị</small>
         </div>
 
         <div class="text-group">
-            <label for="textRight">✏️ Text bên phải (góc dưới phải):</label>
+            <label for="textRight">✏️ Chữ bên phải:</label>
             <input type="text" id="textRight" placeholder="Mặc định: Sau">
             <small class="hint">💡 Để trống sẽ hiển thị "Sau"</small>
         </div>
     </div>
 
     <div class="button-group">
-        <button id="mergeBtn" class="btn btn-primary">🎨 Ghép Ảnh</button>
-        <button id="downloadBtn" class="btn btn-success" style="display: none;">💾 Tải Xuống</button>
-        <button id="clearBtn" class="btn btn-secondary">🔄 Làm Mới</button>
-    </div>
-
-    <div id="resultSection" class="result-section" style="display: none;">
-        <h2>Kết quả</h2>
-        <p class="mobile-hint">📱 Xoay ngang để xem rõ hơn</p>
-        <div class="canvas-container">
-            <canvas id="canvas"></canvas>
-        </div>
+        <button id="mergeBtn" class="btn btn-primary">
+            <span>🎨</span>
+            <span>Ghép & Tải Xuống</span>
+        </button>
+        <button id="clearBtn" class="btn btn-secondary">
+            <span>🔄</span>
+            <span>Làm Mới</span>
+        </button>
     </div>
 
     <div id="loading" class="loading" style="display:none;">
         <div class="spinner"></div>
         <p>Đang xử lý...</p>
-    </div>
-
-    <!-- Overlay yêu cầu xoay ngang -->
-    <div id="rotateOverlay" class="rotate-overlay" style="display:none;">
-        <div class="rotate-content">
-            <div class="rotate-icon">📱➡️📱</div>
-            <h2>Xoay ngang điện thoại</h2>
-            <p>Để xem ảnh rõ hơn, vui lòng xoay điện thoại sang chế độ ngang</p>
-            <div class="rotate-animation">
-                <svg width="100" height="100" viewBox="0 0 100 100">
-                    <rect x="20" y="30" width="60" height="40" rx="5" fill="white" stroke="#667eea" stroke-width="3"/>
-                    <circle cx="50" cy="50" r="5" fill="#667eea"/>
-                    <path d="M 70 70 Q 80 70 80 60" stroke="#667eea" stroke-width="2" fill="none"
-                          marker-end="url(#arrowhead)"/>
-                    <defs>
-                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto">
-                            <polygon points="0 0, 6 3, 0 6" fill="#667eea"/>
-                        </marker>
-                    </defs>
-                </svg>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Fullscreen Editor cho Landscape Mobile -->
-<div id="fullscreenEditor" class="fullscreen-editor" style="display:none;">
-    <div class="editor-header">
-        <div class="editor-title">🖼️ Xem ảnh đã ghép</div>
-        <div class="editor-hint">💡 Xem và tải xuống ảnh của bạn</div>
-    </div>
-
-    <div class="editor-canvas-container">
-        <canvas id="editorCanvas"></canvas>
-    </div>
-
-    <div class="editor-controls">
-        <button id="downloadEditorBtn" class="editor-btn download-btn">
-            <span class="btn-icon">💾</span>
-            <span class="btn-text">Tải xuống</span>
-        </button>
-        <button id="closeEditorBtn" class="editor-btn close-btn">
-            <span class="btn-icon">✖️</span>
-            <span class="btn-text">Đóng</span>
-        </button>
     </div>
 </div>
 
