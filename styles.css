@@ -36,7 +36,7 @@ header p {
     font-size: 1.1em;
 }
 
-. upload-section {
+.upload-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
@@ -152,29 +152,31 @@ input[type="text"]:focus {
 .result-section {
     text-align: center;
     margin-top: 30px;
-    overflow-x: auto;
 }
 
-. result-section h2 {
+.result-section h2 {
     color: #667eea;
     margin-bottom: 20px;
 }
 
-#canvas {
-    max-width: 100%;
+/* Container cho canvas với scroll horizontal trên mobile */
+. canvas-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
     border: 2px solid #e0e0e0;
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    touch-action: none; /* Ngăn zoom/pan mặc định trên mobile */
-    cursor: pointer;
-    transition: transform 0.3s ease;
+    background: #f5f5f5;
 }
 
-/* Zoom canvas trên mobile để dễ kéo thả */
-#canvas.mobile-zoom {
-    transform-origin: top center;
-    max-width: none;
-    width: 150%; /* Phóng to 150% */
+#canvas {
+    display: block;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    touch-action: none;
+    cursor: pointer;
+    margin: 0 auto;
 }
 
 .loading {
@@ -209,12 +211,21 @@ input[type="text"]:focus {
     }
 }
 
-. loading p {
+.loading p {
     color: white;
     font-size: 1.2em;
     margin-top: 20px;
 }
 
+/* Desktop styles */
+@media (min-width: 769px) {
+    #canvas {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* Mobile styles */
 @media (max-width: 768px) {
     .container {
         padding: 20px;
@@ -232,22 +243,34 @@ input[type="text"]:focus {
         width: 100%;
     }
 
-    . result-section {
-        overflow-x: scroll;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    /* Canvas phóng to trên mobile */
-    #canvas. mobile-zoom {
-        width: 200%; /* Phóng to 200% trên mobile */
-        max-width: none;
-    }
-
     .text-section {
         padding: 20px;
     }
 
     label {
         font-size: 1em;
+    }
+
+    /* Canvas hiển thị full size trên mobile, có thể scroll */
+    . canvas-container {
+        margin: 0 -20px;
+        width: calc(100% + 40px);
+        border-radius: 0;
+        padding: 10px;
+    }
+
+    #canvas {
+        min-width: 100%;
+        height: auto;
+    }
+
+    /* Thông báo hướng dẫn cho mobile */
+    .result-section h2::after {
+        content: " 📱 Vuốt ngang để xem toàn bộ";
+        font-size: 0.6em;
+        display: block;
+        margin-top: 10px;
+        color: #999;
+        font-weight: normal;
     }
 }

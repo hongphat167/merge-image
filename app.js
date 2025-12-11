@@ -9,7 +9,7 @@ const downloadBtn = document.getElementById('downloadBtn');
 const clearBtn = document.getElementById('clearBtn');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-const resultSection = document.getElementById('resultSection');
+const resultSection = document. getElementById('resultSection');
 const loading = document.getElementById('loading');
 const preview1 = document.getElementById('preview1');
 const preview2 = document.getElementById('preview2');
@@ -33,7 +33,7 @@ image1Input.addEventListener('change', function (e) {
                 preview1.innerHTML = `<img src="${event.target.result}" alt="Preview 1">`;
             };
         };
-        reader.readAsDataURL(file);
+        reader. readAsDataURL(file);
     }
 });
 
@@ -46,7 +46,7 @@ image2Input.addEventListener('change', function (e) {
             img2 = new Image();
             img2.src = event.target.result;
             img2.onload = function () {
-                preview2.innerHTML = `<img src="${event.target.result}" alt="Preview 2">`;
+                preview2.innerHTML = `<img src="${event.target. result}" alt="Preview 2">`;
             };
         };
         reader.readAsDataURL(file);
@@ -56,7 +56,7 @@ image2Input.addEventListener('change', function (e) {
 // Hàm ghép ảnh
 mergeBtn.addEventListener('click', function () {
     if (!img1 || !img2) {
-        alert('⚠️ Vui lòng chọn đủ 2 ảnh!');
+        alert('⚠️ Vui lòng chọn đủ 2 ảnh! ');
         return;
     }
 
@@ -74,7 +74,6 @@ function mergeImages() {
     const textRight = textRightInput.value || '';
 
     const maxHeight = 600;
-    const padding = 0;
 
     const scale1 = maxHeight / img1.height;
     const scale2 = maxHeight / img2.height;
@@ -119,12 +118,6 @@ function mergeImages() {
     drawCanvas();
     resultSection.style.display = 'block';
     downloadBtn.style.display = 'inline-block';
-
-    // Thêm class để zoom canvas trên mobile
-    if (window.innerWidth <= 768) {
-        canvas.classList.add('mobile-zoom');
-    }
-
     resultSection.scrollIntoView({behavior: 'smooth', block: 'nearest'});
 }
 
@@ -134,7 +127,7 @@ function drawCanvas() {
     const img1Width = img1.width * scale1;
     const img2Width = img2.width * scale2;
 
-    ctx.drawImage(img1, 0, 0, img1Width, canvas.height);
+    ctx. drawImage(img1, 0, 0, img1Width, canvas.height);
     ctx.drawImage(img2, img1Width, 0, img2Width, canvas.height);
 
     texts.forEach((textObj, index) => {
@@ -150,15 +143,15 @@ function drawCanvas() {
 
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 4;
-        ctx.strokeText(textObj.text, textObj.x, textObj.y);
+        ctx.strokeText(textObj.text, textObj. x, textObj.y);
 
         ctx.fillStyle = textObj.color;
-        ctx.fillText(textObj.text, textObj.x, textObj.y);
+        ctx.fillText(textObj.text, textObj. x, textObj.y);
 
         if (selectedText === index) {
             ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';
             ctx.lineWidth = 2;
-            ctx.setLineDash([5, 5]);
+            ctx. setLineDash([5, 5]);
             ctx.strokeRect(textObj.x - 5, textObj.y - 5, textWidth + 10, textHeight + 10);
             ctx.setLineDash([]);
         }
@@ -169,29 +162,27 @@ function drawCanvas() {
 function getPointerPosition(e) {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+    const scaleY = canvas.height / rect. height;
 
     let clientX, clientY;
 
-    if (e.touches && e.touches.length > 0) {
-        // Touch event
+    if (e.touches && e.touches. length > 0) {
         clientX = e.touches[0].clientX;
         clientY = e.touches[0].clientY;
     } else {
-        // Mouse event
         clientX = e.clientX;
-        clientY = e.clientY;
+        clientY = e. clientY;
     }
 
     return {
-        x: (clientX - rect.left) * scaleX,
-        y: (clientY - rect.top) * scaleY
+        x:  (clientX - rect.left) * scaleX,
+        y:  (clientY - rect.top) * scaleY
     };
 }
 
-// Hàm xử lý bắt đầu kéo (chung cho mouse và touch)
+// Hàm xử lý bắt đầu kéo
 function handleDragStart(e) {
-    e.preventDefault(); // Ngăn scroll trên mobile
+    e.preventDefault();
 
     const pos = getPointerPosition(e);
     const mouseX = pos.x;
@@ -204,7 +195,7 @@ function handleDragStart(e) {
             mouseY >= t.y - 5 && mouseY <= t.y + t.height + 5) {
             selectedText = i;
             isDragging = true;
-            dragOffset.x = mouseX - t.x;
+            dragOffset. x = mouseX - t.x;
             dragOffset.y = mouseY - t.y;
             break;
         }
@@ -212,10 +203,10 @@ function handleDragStart(e) {
     drawCanvas();
 }
 
-// Hàm xử lý di chuyển (chung cho mouse và touch)
+// Hàm xử lý di chuyển
 function handleDragMove(e) {
     if (isDragging && selectedText !== null) {
-        e.preventDefault(); // Ngăn scroll trên mobile
+        e.preventDefault();
 
         const pos = getPointerPosition(e);
         const mouseX = pos.x;
@@ -227,7 +218,7 @@ function handleDragMove(e) {
     }
 }
 
-// Hàm xử lý kết thúc kéo (chung cho mouse và touch)
+// Hàm xử lý kết thúc kéo
 function handleDragEnd(e) {
     isDragging = false;
 }
@@ -252,7 +243,7 @@ downloadBtn.addEventListener('click', function () {
 
     const link = document.createElement('a');
     link.download = 'merged-image.png';
-    link.href = canvas.toDataURL('image/png');
+    link. href = canvas.toDataURL('image/png');
     link.click();
 
     selectedText = tempSelected;
@@ -261,7 +252,7 @@ downloadBtn.addEventListener('click', function () {
 
 // Làm mới form
 clearBtn.addEventListener('click', function () {
-    if (confirm('🔄 Bạn có chắc muốn làm mới và bắt đầu lại? ')) {
+    if (confirm('🔄 Bạn có chắc muốn làm mới và bắt đầu lại?')) {
         image1Input.value = '';
         image2Input.value = '';
         textLeftInput.value = '';
@@ -275,7 +266,6 @@ clearBtn.addEventListener('click', function () {
         selectedText = null;
         resultSection.style.display = 'none';
         downloadBtn.style.display = 'none';
-        canvas.classList.remove('mobile-zoom');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 });
