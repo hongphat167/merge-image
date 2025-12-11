@@ -1,12 +1,12 @@
 * {
     margin: 0;
-    padding: 0;
+    padding:  0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family:  'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:   linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     padding: 20px;
 }
@@ -14,10 +14,10 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background: white;
-    border-radius: 20px;
+    background:  white;
+    border-radius:  20px;
     padding: 40px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow:   0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 header {
@@ -33,7 +33,7 @@ header h1 {
 
 header p {
     color: #666;
-    font-size: 1.1em;
+    font-size:   1.1em;
 }
 
 .upload-section {
@@ -52,7 +52,7 @@ label {
     font-weight: 600;
     color: #333;
     margin-bottom: 8px;
-    font-size: 1.1em;
+    font-size:   1.1em;
 }
 
 input[type="file"] {
@@ -80,9 +80,9 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    outline:   none;
+    border-color:   #667eea;
+    box-shadow:  0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .preview {
@@ -100,13 +100,13 @@ input[type="text"]:focus {
 .preview img {
     max-width: 100%;
     max-height: 200px;
-    object-fit: contain;
+    object-fit:  contain;
 }
 
 .text-section {
     background: #f8f9ff;
-    padding: 30px;
-    border-radius: 15px;
+    padding:   30px;
+    border-radius:  15px;
     margin-bottom: 30px;
 }
 
@@ -122,20 +122,20 @@ input[type="text"]:focus {
     padding: 15px 40px;
     border: none;
     border-radius: 50px;
-    font-size: 1.1em;
+    font-size:  1.1em;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s;
+    transition:   all 0.3s;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn:hover {
-    transform: translateY(-2px);
+    transform:   translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background:  linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
 }
 
@@ -144,42 +144,45 @@ input[type="text"]:focus {
     color: white;
 }
 
-. btn-secondary {
-    background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+.  btn-secondary {
+    background:   linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
     color: #333;
 }
 
-.result-section {
+. result-section {
     text-align: center;
     margin-top: 30px;
 }
 
 .result-section h2 {
     color: #667eea;
-    margin-bottom: 20px;
+    margin-bottom:   20px;
+    font-size: 1.8em;
 }
 
-/* Container cho canvas với scroll horizontal trên mobile */
-. canvas-container {
+/* Container cho canvas */
+.canvas-container {
     width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: #f5f5f5;
+    border:  2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow:  0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 #canvas {
     display: block;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
     touch-action: none;
     cursor: pointer;
-    margin: 0 auto;
 }
 
-.loading {
+. loading {
     position: fixed;
     top: 0;
     left: 0;
@@ -197,18 +200,14 @@ input[type="text"]:focus {
     width: 50px;
     height: 50px;
     border: 5px solid #f3f3f3;
-    border-top: 5px solid #667eea;
+    border-top:  5px solid #667eea;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation:  spin 1s linear infinite;
 }
 
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .loading p {
@@ -217,60 +216,90 @@ input[type="text"]:focus {
     margin-top: 20px;
 }
 
-/* Desktop styles */
-@media (min-width: 769px) {
-    #canvas {
-        max-width: 100%;
-        height: auto;
-    }
+/* Hint text cho mobile */
+. mobile-hint {
+    display: none;
+    font-size: 0.9em;
+    color: #999;
+    margin-top: 10px;
+    font-style: italic;
 }
 
 /* Mobile styles */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
     .container {
         padding: 20px;
+        border-radius: 15px;
     }
 
     header h1 {
         font-size: 1.8em;
     }
 
+    header p {
+        font-size:  0.9em;
+    }
+
+    .upload-section {
+        grid-template-columns:  1fr;
+        gap: 15px;
+    }
+
     .button-group {
         flex-direction: column;
+        gap: 10px;
     }
 
     .btn {
         width: 100%;
+        padding: 12px 30px;
     }
 
     .text-section {
-        padding: 20px;
+        padding: 15px;
     }
 
     label {
         font-size: 1em;
     }
 
-    /* Canvas hiển thị full size trên mobile, có thể scroll */
-    . canvas-container {
-        margin: 0 -20px;
-        width: calc(100% + 40px);
-        border-radius: 0;
+    .result-section h2 {
+        font-size: 1.4em;
+    }
+
+    /* Canvas container trên mobile */
+    .canvas-container {
         padding: 10px;
+        margin:  0 -10px;
+        border-radius: 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
     }
 
+    /* Canvas có thể cuộn ngang nhưng vẫn nằm gọn trong container */
     #canvas {
+        max-width: none;
+        width: auto;
         min-width: 100%;
-        height: auto;
     }
 
-    /* Thông báo hướng dẫn cho mobile */
-    .result-section h2::after {
-        content: " 📱 Vuốt ngang để xem toàn bộ";
-        font-size: 0.6em;
+    .mobile-hint {
         display: block;
-        margin-top: 10px;
-        color: #999;
-        font-weight: normal;
+    }
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 30px;
+    }
+
+    header h1 {
+        font-size: 2.2em;
     }
 }
